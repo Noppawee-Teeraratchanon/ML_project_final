@@ -1,0 +1,35 @@
+version: '3.9'
+
+services:
+  app:
+    command: python3 /root/app.py
+    image: noppawee/ait-ml-app:project_final
+    environment:
+      - HOST=0.0.0.0
+      - PORT=80
+    # This is important for asking Traefik to use your container.
+    # This is important for asking Traefik to use your container.
+    labels:
+      # Allow Traefik to talk with your service
+      - traefik.enable=true
+      # Tell Traefik to use port 80
+      - traefik.http.services.app-MLproject_group8.loadbalancer.server.port=80
+      # This config you domain name. By default, your subdomain is app-MLproject_group8
+      # If you which to change the subdomain name, you uncomment the below configuration
+      - traefik.http.routers.app-MLproject_group8.rule=Host(`fraud_detection.ml2023.cs.ait.ac.th`)
+      # Below is for enable SSL.
+      - traefik.http.routers.app-MLproject_group8.tls=true
+      - traefik.http.routers.app-MLproject_group8.tls.certresolver=production
+      - traefik.http.routers.app-MLproject_group8.entrypoints=websecure
+    # This define network. You would need to keep it like this.
+    networks:
+      - default
+      - traefik_default
+      
+ 
+
+# Keep it like this too.
+networks:
+  default:
+  traefik_default:
+    external: true

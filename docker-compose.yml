@@ -1,0 +1,29 @@
+version: '3.9'
+services:
+  app:
+    #command: python3 /root/code/app.py
+    command: python3 /root/app.py
+    image: noppawee/ait-ml-app:project_final
+    platform: linux/x86_64
+    build: 
+      context: .
+      dockerfile: python.Dockerfile
+    ports:
+      - 9001:80
+    volumes:
+      - .:/root
+      - .vscode-server:/root/.vscode-server
+    environment:
+      - HOST=0.0.0.0
+      - PORT=80
+      
+  mlflow:
+    image: noppawee/ait-ml-mlflow:project
+    platform: linux/x86_64
+    build: 
+      context: .
+      dockerfile: mlflow.Dockerfile
+    volumes:
+      - ./_mlflow:/mlflow
+    ports:
+      - 5000:5000
